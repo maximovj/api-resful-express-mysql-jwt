@@ -60,12 +60,29 @@ app.get('/', (req, res) => {
 app.post('/register', async (req, res) => {
     const { email, password } = req.body;
     const encriptado = await bcryptjs.hash(password, 10);
-
     await users.create({
         email,
         password: encriptado
     })
         .then(() => res.status(201).json({ message: 'Usuario registrado' }))
+        .catch((err) => res.status(500).json({ message: err.message }));
+});
+
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    await users.findOne({ where: { email: email } })
+        .then((user) => {
+            console.log(user.password);
+            bcryptjs.compare(password, user.password)
+                .then((isEquals) => {
+                    if (isEquals) {
+                        return res.status(200).json({ message: 'Usuario inicio sesión, exitosamente.' });
+                    } else {
+                        return res.status(200).json({ message: 'Credenciales incorrectos.' });
+                    }
+                })
+                .catch((err) => res.status(500).json({ message: err.message }));
+        })
         .catch((err) => res.status(500).json({ message: err.message }));
 });
 

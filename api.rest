@@ -23,3 +23,15 @@ Content-Type: application/json
     "email": "example@example.com",
     "password": "password" 
 }
+
+### 
+
+# @name loginUser
+# Ruta para iniciar sesión
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+    "email": "example@example.com",
+    "password": "password" 
+}

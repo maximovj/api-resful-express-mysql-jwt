@@ -2,6 +2,7 @@ require('dotenv').config();
 const fs = require('fs');
 const sequelize = require('sequelize');
 const bcryptjs = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const morgan = require('morgan');
 const express = require('express');
 const https = require('https');
@@ -12,6 +13,7 @@ app.set('url', process.env.APP_URL || 'http://localhost')
 app.set('env', process.env.APP_ENV || 'local');
 app.set('src_ssl_key', process.env.SRC_SSL_KEY || '');
 app.set('src_ssl_crt', process.env.SRC_SSL_CRT || '');
+app.set('hash_jwt', process.env.APP_HASH_JWT || 'shhhh');
 
 const database = new sequelize.Sequelize({
     host: process.env.DB_HOST || 'localhost',
@@ -72,11 +74,12 @@ app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     await users.findOne({ where: { email: email } })
         .then((user) => {
-            console.log(user.password);
             bcryptjs.compare(password, user.password)
                 .then((isEquals) => {
                     if (isEquals) {
-                        return res.status(200).json({ message: 'Usuario inicio sesión, exitosamente.' });
+                        const token = jwt.sign({ id: user.id, email: user.email }, app.get('hash_jwt'));
+
+                        return res.status(200).json({ message: 'Usuario inicio sesión, exitosamente.', token });
                     } else {
                         return res.status(200).json({ message: 'Credenciales incorrectos.' });
                     }

@@ -1,6 +1,7 @@
 require('dotenv').config();
 const fs = require('fs');
 const sequelize = require('sequelize');
+const bcryptjs = require('bcryptjs');
 const morgan = require('morgan');
 const express = require('express');
 const https = require('https');
@@ -26,12 +27,46 @@ database.validate()
     .then(() => console.log('Base de datos conectado, exitosamente.'))
     .catch(() => console.log('Error en la conexión a la base de datos.'));
 
+const users = database.define('users', {
+    // Definir la columna `email`
+    email: {
+        type: sequelize.DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+    },
+    // Definir la columna `password`
+    password: {
+        type: sequelize.DataTypes.STRING,
+        allowNull: false,
+    }
+}, {
+    freezeTableName: false,
+    tableName: 'users',
+    timestamps: true,
+    underscored: true,
+    alter: true,
+});
+
+database.sync({ alter: false, force: false });
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
 app.get('/', (req, res) => {
     res.status(200).json({ message: 'API, Funcionando' });
+});
+
+app.post('/register', async (req, res) => {
+    const { email, password } = req.body;
+    const encriptado = await bcryptjs.hash(password, 10);
+
+    await users.create({
+        email,
+        password: encriptado
+    })
+        .then(() => res.status(201).json({ message: 'Usuario registrado' }))
+        .catch((err) => res.status(500).json({ message: err.message }));
 });
 
 app.use(express.static('public'));

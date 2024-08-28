@@ -11,3 +11,15 @@ GET {{baseUrl}}/
 # @name humans
 # Ruta para acceder al archivo humans.txt
 GET {{baseUrl}}/humans.txt
+
+### 
+
+# @name registerUser
+# Ruta para registrar un nuevo usuario
+POST {{baseUrl}}/register 
+Content-Type: application/json
+
+{
+    "email": "example@example.com",
+    "password": "password" 
+}

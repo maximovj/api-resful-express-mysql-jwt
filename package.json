@@ -1,0 +1,25 @@
+{
+  "name": "api-resful-express-mysql-jwt",
+  "version": "1.0.0",
+  "description": "Este repositorio contiene un proyecto API RestFul usando NodeJS + Express + Sequelize + MySQL+ JWT + CORS + HTTPS",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.9.1",
+    "eslint": "^9.9.1",
+    "globals": "^15.9.0",
+    "nodemon": "^3.1.4"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "https": "^1.0.0",
+    "morgan": "^1.10.0"
+  }
+}

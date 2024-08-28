@@ -1,0 +1,13 @@
+@baseUrl=http://localhost:4000
+
+###
+
+# @name root
+# Ruta para acceder a la raíz de la API
+GET {{baseUrl}}/
+
+###
+
+# @name humans
+# Ruta para acceder al archivo humans.txt
+GET {{baseUrl}}/humans.txt

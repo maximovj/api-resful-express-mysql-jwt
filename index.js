@@ -55,7 +55,25 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
-app.get('/', (req, res) => {
+const handleJWT = async (req, res, next) => {
+    const authorization = req.headers['authorization'] || '';
+    const bearer = authorization.includes('Bearer');
+    const token = authorization.split(" ")[1];
+
+    if (!bearer || !token) {
+        return res.status(400).json({ message: 'Token no proporcionado.' });
+    }
+
+    jwt.verify(token, app.get('hash_jwt'), (err, payload) => {
+        if (err) {
+            return res.sendStatus(403);
+        }
+        req.user_session = payload;
+        next();
+    });
+};
+
+app.get('/', handleJWT, (req, res) => {
     res.status(200).json({ message: 'API, Funcionando' });
 });
 
@@ -77,7 +95,7 @@ app.post('/login', async (req, res) => {
             bcryptjs.compare(password, user.password)
                 .then((isEquals) => {
                     if (isEquals) {
-                        const token = jwt.sign({ id: user.id, email: user.email }, app.get('hash_jwt'));
+                        const token = jwt.sign({ id: user.id, email: user.email }, app.get('hash_jwt'), { expiresIn: '30m' });
 
                         return res.status(200).json({ message: 'Usuario inicio sesión, exitosamente.', token });
                     } else {

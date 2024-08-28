@@ -1,5 +1,6 @@
 require('dotenv').config();
 const fs = require('fs');
+const sequelize = require('sequelize');
 const morgan = require('morgan');
 const express = require('express');
 const https = require('https');
@@ -10,6 +11,20 @@ app.set('url', process.env.APP_URL || 'http://localhost')
 app.set('env', process.env.APP_ENV || 'local');
 app.set('src_ssl_key', process.env.SRC_SSL_KEY || '');
 app.set('src_ssl_crt', process.env.SRC_SSL_CRT || '');
+
+const database = new sequelize.Sequelize({
+    host: process.env.DB_HOST || 'localhost',
+    port: process.env.DB_PORT || 3306,
+    username: process.env.DB_USERNAME || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_DATABASE || 'api_restful_express',
+    dialect: process.env.DB_DIALECT || 'mysql',
+    logging: false,
+});
+
+database.validate()
+    .then(() => console.log('Base de datos conectado, exitosamente.'))
+    .catch(() => console.log('Error en la conexión a la base de datos.'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

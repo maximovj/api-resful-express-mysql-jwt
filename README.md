@@ -66,7 +66,7 @@ database.sync({ alter: true, force: true }).then(() => console.log('Base de dato
 # Comandos utilizados
 
 ```shell
-$ npm install express sequelize mysql2 dotenv morgan body-parser  cors https jsonwebtoken bcryptjs
+$ npm install express sequelize mysql2 dotenv morgan  cors https jsonwebtoken bcryptjs
 ```
 
 ```shell

@@ -1,11 +1,12 @@
 @baseUrl=http://localhost:4000
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJleGFtcGxlQGV4YW1wbGUuY29tIiwiaWF0IjoxNzI0ODg2NjQwLCJleHAiOjE3MjQ4ODg0NDB9.iGkc3J2TMoubX-dUotPpqyLquDx0FUKKTLdoEh_nwZc
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJleGFtcGxlQGV4YW1wbGUuY29tIiwiaWF0IjoxNzI0OTA0NDUxLCJleHAiOjE3MjQ5MDYyNTF9.4tk5U-gCBU1dCcCNk_FQTKWOm4B5sI3M8IWYS5Q7Be4
 
 ###
 
 # @name root
 # Ruta para acceder a la raíz de la API
 GET {{baseUrl}}/
+Origin: {{baseUrl}}
 Authorization: Bearer {{token}}
 
 ###
@@ -13,12 +14,14 @@ Authorization: Bearer {{token}}
 # @name humans
 # Ruta para acceder al archivo humans.txt
 GET {{baseUrl}}/humans.txt
+Origin: {{baseUrl}}
 
 ### 
 
 # @name registerUser
 # Ruta para registrar un nuevo usuario
 POST {{baseUrl}}/register 
+Origin: {{baseUrl}}
 Content-Type: application/json
 
 {
@@ -31,6 +34,7 @@ Content-Type: application/json
 # @name loginUser
 # Ruta para iniciar sesión
 POST {{baseUrl}}/login
+Origin: {{baseUrl}}
 Content-Type: application/json
 
 {

@@ -3,6 +3,7 @@ const fs = require('fs');
 const sequelize = require('sequelize');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 const morgan = require('morgan');
 const express = require('express');
 const https = require('https');
@@ -14,6 +15,23 @@ app.set('env', process.env.APP_ENV || 'local');
 app.set('src_ssl_key', process.env.SRC_SSL_KEY || '');
 app.set('src_ssl_crt', process.env.SRC_SSL_CRT || '');
 app.set('hash_jwt', process.env.APP_HASH_JWT || 'shhhh');
+
+const lstEnv = Object.keys(process.env);
+const lstCors = lstEnv.filter(_env => _env.startsWith('APP_CORS_'));
+const allowedOrigins = lstCors.map(_env => process.env[_env]);
+
+app.use(cors({
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    optionsSuccessStatus: 200,
+    allowedHeaders: ['Content-Type', 'Content-Length', 'Origin', 'Authorization'],
+    origin: function (origin, callback) {
+        const org = origin || null;
+        if (allowedOrigins.indexOf(org) === -1 || !org) {
+            callback(new Error("CORS denegado."), false)
+        }
+        callback(null, true);
+    }
+}));
 
 const database = new sequelize.Sequelize({
     host: process.env.DB_HOST || 'localhost',

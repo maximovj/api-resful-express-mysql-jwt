@@ -60,7 +60,7 @@ Esto solo se tiene que hacer una vez, después se puede deshabilitar de nuevo.
 
 ```js
 // Sincronizar la base de datos
-config.sync({ alter: true, force: true }).then(() => console.log('Base de datos sincronizado'));
+database.sync({ alter: true, force: true }).then(() => console.log('Base de datos sincronizado'));
 ```
 
 # Comandos utilizados

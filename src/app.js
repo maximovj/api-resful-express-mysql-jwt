@@ -35,6 +35,6 @@ app.use(authRoutes);
 app.use(configJWT, mainRoutes);
 
 // Sincronizar la base de datos
-database.sync({ alter: false, force: false });
+database.sync({ alter: true, force: true }).then(() => console.log('Base de datos sincronizado'));
 
 module.exports = app;
